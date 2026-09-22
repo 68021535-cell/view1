@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>อัปโหลด CT Scan | Checkup Lung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=6"></head><body>
+<div class="layout"><aside class="side">
+<div class="brand"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#60a5fa" stroke-width="1.8"><path d="M12 4v9m0 0c0 4-3 7-6 7-1.5 0-2-1-2-3 0-5 3-9 8-9s8 4 8 9c0 2-.5 3-2 3-3 0-6-3-6-7z"/></svg><div class="txt">Checkup<span> Lung</span></div></div>
+<a class="item" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span class="txt">หน้าหลัก</span></a>
+<a class="item on" href="upload.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/></svg><span class="txt">อัปโหลด CT Scan</span></a>
+<a class="item" href="scans.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h16M4 19h16"/></svg><span class="txt">รายการ CT Scan</span></a>
+<a class="item" href="segmentation.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm0 5a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg><span class="txt">วิเคราะห์ก้อนเนื้อ</span></a>
+<a class="item" href="view3d.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 21 8v8l-9 5-9-5V8z"/></svg><span class="txt">ภาพ 3 มิติ</span></a>
+<a class="item" href="measure.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14 14 3l7 7L10 21z"/></svg><span class="txt">วัดขนาดก้อนเนื้อ</span></a>
+<a class="item" href="report.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7zM14 3v5h5"/></svg><span class="txt">รายงาน</span></a>
+<div class="foot"><div class="avatar" data-initial>ผ</div><div><div style="color:#fff;font-size:13.5px" data-me>ผู้ใช้งาน</div><div style="font-size:12px" data-role>student</div></div>
+<button onclick="logout()" class="btn sm ghost txt" style="margin-left:auto;padding:5px 10px">ออก</button></div></aside><div class="main">
+<div class="top"><h1>อัปโหลด CT Scan</h1><div class="crumb">เลือกไฟล์ภาพ CT เพื่อส่งเข้าระบบวิเคราะห์</div><div class="right"></div></div>
+<div class="wrap"><div class="cols"><div class="card">
+<div id="form"><h2 class="t">อัปโหลดไฟล์ใหม่</h2>
+<label id="zone" class="drop" style="display:block;cursor:pointer">
+<div id="zoneBody"><div style="font-size:34px">☁️</div>
+<div style="margin:10px 0 4px;color:#1e293b;font-weight:600">ยังไม่มีไฟล์ในคิว</div>
+<div style="font-size:13.5px;line-height:1.7">ลากไฟล์ CT มาวางตรงนี้ หรือคลิกเพื่อเลือกจากเครื่อง<br>รองรับ DICOM (.dcm) และไฟล์ภาพ ขนาดไม่เกิน 200 MB</div></div>
+<input type="file" accept=".dcm,image/*" style="display:none" onchange="onPick(this)"></label>
+<div id="err" class="alert hide"></div>
+<button class="btn full" style="margin-top:16px" onclick="openConfirm()">ยืนยันและเริ่มวิเคราะห์</button></div>
+
+<div id="loading" style="display:none">
+<div class="empty" style="padding:30px 10px"><div class="spin"></div>
+<h3>กำลังอัปโหลดและประมวลผล</h3><p style="margin-bottom:0">อย่าปิดหน้านี้จนกว่าจะเสร็จ</p>
+<div class="prog"><i id="bar"></i></div><div id="pct" style="font-size:13px">0%</div>
+<ul class="steps"><li class="now">กำลังส่งไฟล์ขึ้นเซิร์ฟเวอร์</li><li>อ่านข้อมูล DICOM และเรียง slice</li>
+<li>วิเคราะห์ก้อนเนื้อด้วยโมเดล U-Net</li><li>สร้างผลลัพธ์</li></ul>
+<button class="btn ghost sm" style="margin-top:18px" onclick="cancelUpload()">ยกเลิก</button></div></div>
+
+<div id="success" style="display:none">
+<div class="empty" style="padding:30px 10px">
+<div style="width:56px;height:56px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px">✅</div>
+<h3 style="color:#16a34a">อัปโหลดและวิเคราะห์สำเร็จ</h3>
+<p>ระบบวิเคราะห์ภาพ CT ของ <b id="sPid">-</b> เรียบร้อยแล้ว พร้อมดูผลการวิเคราะห์</p>
+<button class="btn full" style="margin-top:6px" onclick="go('segmentation.html')">ไปดูผลวิเคราะห์</button>
+<button class="btn ghost full" style="margin-top:10px" onclick="go('upload.html')">อัปโหลดไฟล์อื่นเพิ่ม</button>
+</div></div></div>
+
+<div id="modalBg" class="modal-bg hide">
+<div class="modal">
+<h3>ยืนยันการอัปโหลด</h3>
+<p>ตรวจสอบข้อมูลก่อนเริ่มวิเคราะห์ เมื่อเริ่มแล้วจะไม่สามารถแก้ไขไฟล์หรือ Patient ID ระหว่างประมวลผลได้</p>
+<div class="row" style="border:0"><span>ไฟล์ที่จะอัปโหลด</span><b id="mFile">-</b></div>
+<div class="row" style="border:0"><span>Patient ID</span><b id="mPid">-</b></div>
+<div style="display:flex;gap:10px;margin-top:18px">
+<button class="btn ghost full" onclick="closeConfirm()">ยกเลิก</button>
+<button class="btn full" onclick="confirmUpload()">ยืนยัน เริ่มวิเคราะห์</button>
+</div></div></div>
+
+<div class="card"><h2 class="t">ข้อมูลผู้ป่วย</h2>
+<div class="field"><label class="f">Patient ID</label><input id="pid" value="P005" oninput="hideErr()"></div>
+<div class="field"><label class="f">วันที่ตรวจ</label><input type="date" value="2025-05-11"></div>
+<div class="field"><label class="f">โมเดลที่ใช้</label><select><option>U-Net</option><option>V-Net</option><option>nnU-Net</option></select></div>
+</div></div></div></div></div>
+<script src="js/app.js?v=6"></script><script>guard()</script></body></html>

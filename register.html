@@ -1,0 +1,15 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>สมัครสมาชิก | Checkup Lung</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=6"></head><body class="auth"><div class="box">
+<div style="display:flex;align-items:center;gap:8px;font-size:21px;font-weight:700;margin-bottom:18px">
+<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2563eb" stroke-width="1.8"><path d="M12 4v9m0 0c0 4-3 7-6 7-1.5 0-2-1-2-3 0-5 3-9 8-9s8 4 8 9c0 2-.5 3-2 3-3 0-6-3-6-7z"/></svg>Checkup<span style="color:#2563eb"> Lung</span></div>
+<h1>สมัครสมาชิก</h1><p class="sub">สร้างบัญชีใหม่เพื่อเริ่มอัปโหลดและวิเคราะห์ภาพ CT</p><div id="msg" class="msg"></div><form onsubmit="doRegister(event)">
+<div class="field"><label class="f">ชื่อ-นามสกุล</label><input name="name_" required placeholder="สมชาย ใจดี"></div>
+<div class="field"><label class="f">อีเมล</label><input name="email" type="email" required placeholder="you@hospital.ac.th"></div>
+<div class="field"><label class="f">สถานะผู้ใช้</label><select name="role"><option>student</option><option>แพทย์</option><option>นักวิจัย</option></select></div>
+<div class="field"><label class="f">รหัสผ่าน</label><input name="pass" type="password" required placeholder="อย่างน้อย 6 ตัวอักษร"></div>
+<div class="field"><label class="f">ยืนยันรหัสผ่าน</label><input name="pass2" type="password" required></div>
+<button class="btn full" type="submit">สร้างบัญชี</button></form>
+<p style="text-align:center;font-size:14px;color:#64748b;margin:18px 0 0">มีบัญชีอยู่แล้ว? <a class="link" href="login.html">เข้าสู่ระบบ</a></p>
+</div><script src="js/app.js?v=6"></script></body></html>
